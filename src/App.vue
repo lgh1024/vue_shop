@@ -2,6 +2,7 @@
   <div id="app">
     <!-- 路由占位符 -->
     <router-view></router-view>
+    <!-- 测试一下 -->
   </div>
 </template>
 
