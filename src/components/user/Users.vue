@@ -2,10 +2,9 @@
   <div>
     <!-- 面包屑导航区 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-      <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-      <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- 卡片视图区域 -->
@@ -176,8 +175,8 @@ export default {
     // 验证手机号的规则
     let checkMobile = (rule, value, cb) => {
       // 验证手机号的正则表达式
-      const regMobile =
-        /^(0|86|17951)?(13[0-9]|15[0123456789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+      // const regMobile = /^(0|86|17951)?(13[0-9]|15[0123456789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+      const regMobile = /^1[34578]\d{9}$/
       if (regMobile.test(value)) {
         // 合法的手机号
         return cb();
@@ -266,7 +265,7 @@ export default {
       }
       this.userData.userList = res.data.users;
       this.userData.total = res.data.total;
-      console.log(res);
+      // console.log(res);
     },
     // 监听 pagesize 改变的事件
     handleSizeChange(newSize) {
@@ -372,7 +371,7 @@ export default {
       }
       this.$message.success("用户删除成功！");
       this.getUserList();
-      console.log(res);
+      // console.log(res);
     },
   },
 };
