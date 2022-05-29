@@ -156,6 +156,30 @@
         <el-button type="primary" @click="editUserInfo">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 分配权限的对话框 -->
+    <el-dialog title="提示" :visible.sync="setRoleDialogVisible" width="50%" @close="setRoleDialogClose">
+      <div>
+        <p>当前的用户: {{ userInfo.username }}</p>
+        <p>当前的角色: {{ userInfo.role_name }}</p>
+        <p>
+          分配新角色:
+          <el-select v-model="selectedRoleId" placeholder="请选择">
+            <el-option
+              v-for="item in rolesList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRoleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveRoleInfo">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -176,7 +200,7 @@ export default {
     let checkMobile = (rule, value, cb) => {
       // 验证手机号的正则表达式
       // const regMobile = /^(0|86|17951)?(13[0-9]|15[0123456789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
-      const regMobile = /^1[34578]\d{9}$/
+      const regMobile = /^1[34578]\d{9}$/;
       if (regMobile.test(value)) {
         // 合法的手机号
         return cb();
@@ -250,6 +274,14 @@ export default {
           { validator: checkMobile, trigger: "blur" },
         ],
       },
+      // 控制分配角色对话框的显示与隐藏
+      setRoleDialogVisible: false,
+      // 需要被分配角色的用户信息
+      userInfo: {},
+      // 所有角色的数据列表
+      rolesList: [],
+      // 已选择的id值
+      selectedRoleId: "",
     };
   },
   created() {
@@ -372,6 +404,41 @@ export default {
       this.$message.success("用户删除成功！");
       this.getUserList();
       // console.log(res);
+    },
+    // 展示分配角色的对话框
+    async setRoles(userInfo) {
+      this.userInfo = userInfo;
+
+      // 在展示对话框之前,获取所有角色的列表
+      const { data: res } = await this.$http.get("roles");
+      if (res.meta.status !== 200) {
+        return this.$message.error("获取角色列表失败!0");
+      }
+      this.rolesList = res.data;
+
+      this.setRoleDialogVisible = true;
+    },
+    // 点击按钮,分配角色
+    saveRoleInfo() {
+      if (!this.selectedRoleId) {
+        return this.$message.error("请选择要分配的角色!");
+      }
+      this.$http
+        .put(`users/${this.userInfo.id}/role`, { rid: this.selectedRoleId })
+        .then((res) => {
+          // console.log(res);
+          if (res.status !== 200) {
+            return this.$message.error("更新角色失败! ");
+          }
+          this.$message.success("更新角色成功!");
+          this.getUserList();
+          this.setRoleDialogVisible = false;
+        });
+    },
+    // 监听分配角色对话框的关闭事件
+    setRoleDialogClose() {
+      this.selectedRoleId = '',
+      this.userInfo = {}
     },
   },
 };
