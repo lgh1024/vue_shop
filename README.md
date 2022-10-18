@@ -5,7 +5,7 @@
 ```
 git clone https://github.com/lgh1024/vue_shop.git
 ``` 
-或用下面的会快一点
+克隆太慢的话用下面的会快一点
 ```
 git clone https://gitee.com/lgh1024/vue_shop.git
 ```
