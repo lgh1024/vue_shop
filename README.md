@@ -1,11 +1,13 @@
-# vue_shop
+## 项目名称
+- 电商后台管理系统
 
-## Project setup
-```
-npm install
-```
+### 项目克隆
+- git clone https://github.com/lgh1024/vue_shop.git
+#### 安装依赖
+- npm install
 
-### Compiles and hot-reloads for development
+
+#### 项目运行
 ```
 npm run serve
 ```
